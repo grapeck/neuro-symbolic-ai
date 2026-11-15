@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from typing import Any
 
 try:
@@ -140,9 +141,14 @@ class LLMClient:
                     or os.getenv("GOOGLE_API_KEY")
                 )
                 if effective_key:
-                    self.client = genai.Client(api_key=effective_key)
+                    self.client = genai.Client(
+                        api_key=effective_key,
+                        http_options={"api_version": "v1beta"},
+                    )
                 else:
-                    self.client = genai.Client()
+                    self.client = genai.Client(
+                        http_options={"api_version": "v1beta"},
+                    )
                 logger.info(
                     "Initialized Google Gemini client with model=%s",
                     self.model,
@@ -213,16 +219,34 @@ class LLMClient:
                 messages.append({"role": str(role), "content": str(content)})
         messages.append({"role": "user", "content": user_message})
 
-        try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-            )
-            choice = response.choices[0]
-            return choice.message.content or ""
-        except Exception as exc:
-            logger.error("OpenAI generation failed: %s", exc)
-            raise RuntimeError(f"OpenAI generation failed: {exc}") from exc
+        max_rate_retries = 5
+        base_delay = 3.0
+
+        for attempt in range(max_rate_retries):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                )
+                choice = response.choices[0]
+                return choice.message.content or ""
+            except Exception as exc:
+                exc_str = str(exc)
+                is_rate_limit = any(
+                    err in exc_str.lower()
+                    for err in ["429", "rate limit", "ratelimit", "resource_exhausted", "quota"]
+                )
+                if is_rate_limit and attempt < max_rate_retries - 1:
+                    sleep_time = base_delay * (2 ** attempt)
+                    logger.warning(
+                        "Rate limit reached (OpenAI). Backing off for %.1fs (attempt %d/%d)...",
+                        sleep_time, attempt + 1, max_rate_retries
+                    )
+                    time.sleep(sleep_time)
+                    continue
+                logger.error("OpenAI generation failed: %s", exc)
+                raise RuntimeError(f"OpenAI generation failed: {exc}") from exc
+        return ""
 
     def _generate_gemini(
         self,
@@ -243,57 +267,75 @@ class LLMClient:
         Raises:
             RuntimeError: If the Gemini API request fails.
         """
-        try:
-            config = None
-            if system_prompt:
-                if types is not None:
-                    config = types.GenerateContentConfig(system_instruction=system_prompt)
-                else:
-                    config = {"system_instruction": system_prompt}
+        config = None
+        if system_prompt:
+            if types is not None:
+                config = types.GenerateContentConfig(system_instruction=system_prompt)
+            else:
+                config = {"system_instruction": system_prompt}
 
-            if conversation_history:
-                contents = []
-                for turn in conversation_history:
-                    role = turn.get("role", "user")
-                    gemini_role = "model" if role in ("assistant", "model") else "user"
-                    content_text = str(turn.get("content") or turn.get("text", ""))
-                    if types is not None:
-                        contents.append(
-                            types.Content(
-                                role=gemini_role,
-                                parts=[types.Part.from_text(text=content_text)],
-                            )
-                        )
-                    else:
-                        contents.append({
-                            "role": gemini_role,
-                            "parts": [{"text": content_text}],
-                        })
-
+        if conversation_history:
+            contents = []
+            for turn in conversation_history:
+                role = turn.get("role", "user")
+                gemini_role = "model" if role in ("assistant", "model") else "user"
+                content_text = str(turn.get("content") or turn.get("text", ""))
                 if types is not None:
                     contents.append(
                         types.Content(
-                            role="user",
-                            parts=[types.Part.from_text(text=user_message)],
+                            role=gemini_role,
+                            parts=[types.Part.from_text(text=content_text)],
                         )
                     )
                 else:
                     contents.append({
-                        "role": "user",
-                        "parts": [{"text": user_message}],
+                        "role": gemini_role,
+                        "parts": [{"text": content_text}],
                     })
-            else:
-                contents = user_message
 
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=contents,
-                config=config,
-            )
-            return response.text or ""
-        except Exception as exc:
-            logger.error("Gemini generation failed: %s", exc)
-            raise RuntimeError(f"Gemini generation failed: {exc}") from exc
+            if types is not None:
+                contents.append(
+                    types.Content(
+                        role="user",
+                        parts=[types.Part.from_text(text=user_message)],
+                    )
+                )
+            else:
+                contents.append({
+                    "role": "user",
+                    "parts": [{"text": user_message}],
+                })
+        else:
+            contents = user_message
+
+        max_rate_retries = 5
+        base_delay = 3.0
+
+        for attempt in range(max_rate_retries):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=contents,
+                    config=config,
+                )
+                return response.text or ""
+            except Exception as exc:
+                exc_str = str(exc)
+                is_rate_limit = any(
+                    err in exc_str.lower()
+                    for err in ["429", "rate limit", "ratelimit", "resource_exhausted", "quota"]
+                )
+                if is_rate_limit and attempt < max_rate_retries - 1:
+                    sleep_time = base_delay * (2 ** attempt)
+                    logger.warning(
+                        "Rate limit reached (Gemini model %s). Backing off for %.1fs (attempt %d/%d)...",
+                        self.model, sleep_time, attempt + 1, max_rate_retries
+                    )
+                    time.sleep(sleep_time)
+                    continue
+                logger.error("Gemini generation failed: %s", exc)
+                raise RuntimeError(f"Gemini generation failed: {exc}") from exc
+        return ""
 
     def _mock_response(self, user_message: str) -> str:
         """Return deterministic fake SymPy code for testing without API calls.

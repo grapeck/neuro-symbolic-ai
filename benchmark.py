@@ -163,6 +163,7 @@ def run_mode(
     pipeline: MathPipeline,
     dataset: list[dict[str, Any]],
     mode: str,
+    delay: float = 0.0,
 ) -> list[dict[str, Any]]:
     """Run a specific solving mode ('hybrid' or 'baseline') across the dataset.
 
@@ -255,6 +256,9 @@ def run_mode(
             "error": error_str[:300],
             "elapsed_seconds": round(elapsed, 4),
         })
+
+        if delay > 0 and idx < total:
+            time.sleep(delay)
 
     return per_problem
 
@@ -504,6 +508,12 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Maximum number of problems to evaluate (for testing or fast runs).",
     )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=1.5,
+        help="Delay in seconds between requests to prevent rate limiting (default: 1.5).",
+    )
     return parser.parse_args()
 
 
@@ -561,13 +571,13 @@ def main() -> None:
     # Run Hybrid evaluation
     if args.mode in ("hybrid", "both"):
         print("▶ Running Hybrid mode (LLM + SymPy):")
-        hybrid_results = run_mode(pipeline, dataset, "hybrid")
+        hybrid_results = run_mode(pipeline, dataset, "hybrid", delay=args.delay)
         hybrid_metrics = compute_metrics(hybrid_results)
 
     # Run Baseline evaluation
     if args.mode in ("baseline", "both"):
         print("\n▶ Running Baseline mode (Pure LLM):")
-        baseline_results = run_mode(pipeline, dataset, "baseline")
+        baseline_results = run_mode(pipeline, dataset, "baseline", delay=args.delay)
         baseline_metrics = compute_metrics(baseline_results)
 
     # Display console ASCII report
