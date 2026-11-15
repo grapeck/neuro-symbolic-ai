@@ -1,0 +1,252 @@
+[
+  {
+    "id": "limit_001",
+    "category": "limits",
+    "problem": "Найдите предел функции sin(x)/x при x стремящемся к 0 (первый замечательный предел).",
+    "latex": "\\lim_{x \\to 0} \\frac{\\sin x}{x}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit(sin(x)/x, x, 0)",
+    "expected_answer_latex": "1",
+    "task_type": "limits",
+    "difficulty": "easy"
+  },
+  {
+    "id": "limit_002",
+    "category": "limits",
+    "problem": "Найдите предел (1 + 1/n)^n при n стремящемся к бесконечности (второй замечательный предел).",
+    "latex": "\\lim_{n \\to \\infty} \\left(1 + \\frac{1}{n}\\right)^n",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', positive=True)\nresult = limit((1 + 1/n)**n, n, oo)",
+    "expected_answer_latex": "e",
+    "task_type": "limits",
+    "difficulty": "medium"
+  },
+  {
+    "id": "limit_003",
+    "category": "limits",
+    "problem": "Найдите предел (x^2 - 1)/(x - 1) при x стремящемся к 1 (неопределённость вида 0/0).",
+    "latex": "\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit((x**2 - 1)/(x - 1), x, 1)",
+    "expected_answer_latex": "2",
+    "task_type": "limits",
+    "difficulty": "medium"
+  },
+  {
+    "id": "limit_004",
+    "category": "limits",
+    "problem": "Найдите предел (3x^2 + 2x)/(5x^2 - 1) при x стремящемся к бесконечности (неопределённость вида ∞/∞).",
+    "latex": "\\lim_{x \\to \\infty} \\frac{3x^2 + 2x}{5x^2 - 1}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit((3*x**2 + 2*x)/(5*x**2 - 1), x, oo)",
+    "expected_answer_latex": "\\frac{3}{5}",
+    "task_type": "limits",
+    "difficulty": "medium"
+  },
+  {
+    "id": "limit_005",
+    "category": "limits",
+    "problem": "Найдите предел многочлена (2x^3 - 5x^2 + 4) при x стремящемся к бесконечности (предел многочлена на бесконечности).",
+    "latex": "\\lim_{x \\to \\infty} (2x^3 - 5x^2 + 4)",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit(2*x**3 - 5*x**2 + 4, x, oo)",
+    "expected_answer_latex": "\\infty",
+    "task_type": "limits",
+    "difficulty": "easy"
+  },
+  {
+    "id": "limit_006",
+    "category": "limits",
+    "problem": "Найдите предел (sqrt(x + 1) - 1)/x при x стремящемся к 0 (предел с иррациональностью).",
+    "latex": "\\lim_{x \\to 0} \\frac{\\sqrt{x + 1} - 1}{x}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit((sqrt(x + 1) - 1)/x, x, 0)",
+    "expected_answer_latex": "\\frac{1}{2}",
+    "task_type": "limits",
+    "difficulty": "medium"
+  },
+  {
+    "id": "limit_007",
+    "category": "limits",
+    "problem": "Найдите предел (tan(x) - x)/x^3 при x стремящемся к 0 (раскрытие неопределённости по правилу Лопиталя).",
+    "latex": "\\lim_{x \\to 0} \\frac{\\tan x - x}{x^3}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = limit((tan(x) - x)/x**3, x, 0)",
+    "expected_answer_latex": "\\frac{1}{3}",
+    "task_type": "limits",
+    "difficulty": "hard"
+  },
+  {
+    "id": "deriv_001",
+    "category": "derivatives",
+    "problem": "Найдите производную многочлена f(x) = x^4 - 3x^2 + 2x - 7 (степенное правило дифференцирования).",
+    "latex": "f(x) = x^4 - 3x^2 + 2x - 7",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nf = x**4 - 3*x**2 + 2*x - 7\nresult = diff(f, x)",
+    "expected_answer_latex": "4x^3 - 6x + 2",
+    "task_type": "derivatives",
+    "difficulty": "easy"
+  },
+  {
+    "id": "deriv_002",
+    "category": "derivatives",
+    "problem": "Найдите производную сложной функции f(x) = sin(x^2 + 1) (цепное правило / правило дифференцирования сложной функции).",
+    "latex": "f(x) = \\sin(x^2 + 1)",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nf = sin(x**2 + 1)\nresult = diff(f, x)",
+    "expected_answer_latex": "2x\\cos(x^2 + 1)",
+    "task_type": "derivatives",
+    "difficulty": "medium"
+  },
+  {
+    "id": "deriv_003",
+    "category": "derivatives",
+    "problem": "Найдите производную произведения функций f(x) = x^2 * e^x (правило произведения Лейбница).",
+    "latex": "f(x) = x^2 e^x",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nf = x**2 * exp(x)\nresult = diff(f, x)",
+    "expected_answer_latex": "x^2 e^x + 2x e^x",
+    "task_type": "derivatives",
+    "difficulty": "medium"
+  },
+  {
+    "id": "deriv_004",
+    "category": "derivatives",
+    "problem": "Найдите производную dy/dx для функции y = sqrt(4 - x^2) (дифференцирование явной ветви неявно заданной кривой x^2 + y^2 = 4 при y > 0).",
+    "latex": "y = \\sqrt{4 - x^2}",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\ny = sqrt(4 - x**2)\nresult = diff(y, x)",
+    "expected_answer_latex": "-\\frac{x}{\\sqrt{4 - x^2}}",
+    "task_type": "derivatives",
+    "difficulty": "medium"
+  },
+  {
+    "id": "deriv_005",
+    "category": "derivatives",
+    "problem": "Найдите производную функции f(x) = x^x при x > 0 (метод логарифмического дифференцирования).",
+    "latex": "f(x) = x^x",
+    "expected_answer_code": "from sympy import *\nx = symbols('x', positive=True)\nf = x**x\nresult = diff(f, x)",
+    "expected_answer_latex": "x^x(\\ln x + 1)",
+    "task_type": "derivatives",
+    "difficulty": "hard"
+  },
+  {
+    "id": "deriv_006",
+    "category": "derivatives",
+    "problem": "Найдите производную тригонометрической функции f(x) = tan(x).",
+    "latex": "f(x) = \\tan x",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nf = tan(x)\nresult = diff(f, x)",
+    "expected_answer_latex": "\\tan^2 x + 1",
+    "task_type": "derivatives",
+    "difficulty": "medium"
+  },
+  {
+    "id": "integ_001",
+    "category": "integrals",
+    "problem": "Найдите неопределённый интеграл многочлена ∫ (x^3 + 2x) dx.",
+    "latex": "\\int (x^3 + 2x)\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(x**3 + 2*x, x)",
+    "expected_answer_latex": "\\frac{x^4}{4} + x^2 + C",
+    "task_type": "integrals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "integ_002",
+    "category": "integrals",
+    "problem": "Найдите неопределённый интеграл ∫ 2x/(x^2 + 1) dx (метод подстановки / замены переменной).",
+    "latex": "\\int \\frac{2x}{x^2 + 1}\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(2*x/(x**2 + 1), x)",
+    "expected_answer_latex": "\\ln(x^2 + 1) + C",
+    "task_type": "integrals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "integ_003",
+    "category": "integrals",
+    "problem": "Найдите неопределённый интеграл ∫ x*sin(x) dx (интегрирование по частям).",
+    "latex": "\\int x \\sin x\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(x*sin(x), x)",
+    "expected_answer_latex": "-x\\cos x + \\sin x + C",
+    "task_type": "integrals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "integ_004",
+    "category": "integrals",
+    "problem": "Вычислите определённый интеграл ∫ от 0 до 1 x^2 dx (формула Ньютона — Лейбница).",
+    "latex": "\\int_0^1 x^2\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(x**2, (x, 0, 1))",
+    "expected_answer_latex": "\\frac{1}{3}",
+    "task_type": "integrals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "integ_005",
+    "category": "integrals",
+    "problem": "Вычислите определённый интеграл ∫ от 0 до π sin(x) dx (тригонометрический интеграл).",
+    "latex": "\\int_0^{\\pi} \\sin x\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(sin(x), (x, 0, pi))",
+    "expected_answer_latex": "2",
+    "task_type": "integrals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "integ_006",
+    "category": "integrals",
+    "problem": "Найдите неопределённый интеграл ∫ 1/(x^2 - 1) dx (интегрирование рациональной дроби разложением на простейшие дроби).",
+    "latex": "\\int \\frac{1}{x^2 - 1}\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(1/(x**2 - 1), x)",
+    "expected_answer_latex": "\\frac{1}{2}\\ln\\left|\\frac{x - 1}{x + 1}\\right| + C",
+    "task_type": "integrals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "integ_007",
+    "category": "integrals",
+    "problem": "Вычислите сходящийся несобственный интеграл первого рода ∫ от 0 до +∞ e^{-x} dx.",
+    "latex": "\\int_0^{+\\infty} e^{-x}\\, dx",
+    "expected_answer_code": "from sympy import *\nx = symbols('x')\nresult = integrate(exp(-x), (x, 0, oo))",
+    "expected_answer_latex": "1",
+    "task_type": "integrals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "series_001",
+    "category": "series",
+    "problem": "Найдите сумму бесконечно убывающей геометрической прогрессии ∑ (1/2)^n от n=0 до ∞.",
+    "latex": "\\sum_{n=0}^{\\infty} \\left(\\frac{1}{2}\\right)^n",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', integer=True, nonnegative=True)\nresult = Sum(Rational(1, 2)**n, (n, 0, oo)).doit()",
+    "expected_answer_latex": "2",
+    "task_type": "series",
+    "difficulty": "easy"
+  },
+  {
+    "id": "series_002",
+    "category": "series",
+    "problem": "Исследуйте на сходимость p-ряд Дирихле ∑ 1/n^2 от n=1 до ∞ и найдите его сумму (базельская задача).",
+    "latex": "\\sum_{n=1}^{\\infty} \\frac{1}{n^2}",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', positive=True, integer=True)\nresult = Sum(1/n**2, (n, 1, oo)).doit()",
+    "expected_answer_latex": "\\frac{\\pi^2}{6}",
+    "task_type": "series",
+    "difficulty": "medium"
+  },
+  {
+    "id": "series_003",
+    "category": "series",
+    "problem": "Найдите сумму телескопического ряда ∑ 1/(n(n + 1)) от n=1 до ∞.",
+    "latex": "\\sum_{n=1}^{\\infty} \\frac{1}{n(n + 1)}",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', positive=True, integer=True)\nresult = Sum(1/(n*(n + 1)), (n, 1, oo)).doit()",
+    "expected_answer_latex": "1",
+    "task_type": "series",
+    "difficulty": "medium"
+  },
+  {
+    "id": "series_004",
+    "category": "series",
+    "problem": "Найдите радиус сходимости степенного ряда ∑ x^n / 2^n от n=0 до ∞.",
+    "latex": "\\sum_{n=0}^{\\infty} \\frac{x^n}{2^n}",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', positive=True, integer=True)\nc_n = 1 / 2**n\nresult = limit(c_n / c_n.subs(n, n + 1), n, oo)",
+    "expected_answer_latex": "2",
+    "task_type": "series",
+    "difficulty": "hard"
+  },
+  {
+    "id": "series_005",
+    "category": "series",
+    "problem": "Найдите сумму знакочередующегося ряда Лейбница ∑ (-1)^n / (2n + 1) от n=0 до ∞.",
+    "latex": "\\sum_{n=0}^{\\infty} \\frac{(-1)^n}{2n + 1}",
+    "expected_answer_code": "from sympy import *\nn = symbols('n', nonnegative=True, integer=True)\nresult = Sum((-1)**n / (2*n + 1), (n, 0, oo)).doit()",
+    "expected_answer_latex": "\\frac{\\pi}{4}",
+    "task_type": "series",
+    "difficulty": "medium"
+  }
+]
