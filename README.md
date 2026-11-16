@@ -29,7 +29,7 @@ flowchart TD
     E --> F{"Backward Verifier\n(Symbolic Verification)"}
     
     F -->|Verification Failed| SC
-    SC -->|Retry Prompt (attempts <= 3)| B
+    SC -->|"Retry Prompt: max 3 attempts"| B
     SC -.->|Max Retries Exceeded| G["Final Answer\n(Error / Unverified Result)"]
     
     F -->|Verification Succeeded| G["Final Answer\n(SymPy Object + LaTeX)"]
