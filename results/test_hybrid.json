@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-11-15T16:46:39.934533+00:00",
+  "config": {
+    "mode": "hybrid",
+    "dataset": "data/calculus_dataset.json",
+    "output": "results/test_hybrid.json",
+    "max_problems": 2,
+    "mock_mode": true,
+    "llm_model": "unknown",
+    "max_retries": 3
+  },
+  "per_problem_results": {
+    "hybrid": [
+      {
+        "id": "limit_001",
+        "category": "limits",
+        "task_type": "limits",
+        "difficulty": "easy",
+        "mode": "hybrid",
+        "success": true,
+        "execution_rate": 1.0,
+        "symbolic_match": 1.0,
+        "pass_at_1": 1.0,
+        "pass_at_3": 1.0,
+        "attempts": 1,
+        "answer": "1",
+        "error": "",
+        "elapsed_seconds": 0.0315
+      },
+      {
+        "id": "limit_002",
+        "category": "limits",
+        "task_type": "limits",
+        "difficulty": "medium",
+        "mode": "hybrid",
+        "success": false,
+        "execution_rate": 1.0,
+        "symbolic_match": 0.0,
+        "pass_at_1": 0.0,
+        "pass_at_3": 0.0,
+        "attempts": 1,
+        "answer": "1",
+        "error": "",
+        "elapsed_seconds": 0.1093
+      }
+    ],
+    "baseline": []
+  },
+  "aggregate_metrics": {
+    "hybrid": {
+      "mode": "hybrid",
+      "total_problems": 2,
+      "execution_rate": 1.0,
+      "symbolic_equivalence_rate": 0.5,
+      "pass_at_1": 0.5,
+      "pass_at_3": 0.5,
+      "success_rate": 0.5,
+      "avg_attempts": 1.0,
+      "avg_elapsed_seconds": 0.0704,
+      "category_breakdown": {
+        "limits": {
+          "total": 2,
+          "success": 1,
+          "success_rate": 0.5,
+          "symbolic_equivalence_rate": 0.5,
+          "pass_at_1": 0.5,
+          "pass_at_3": 0.5,
+          "execution_rate": 1.0
+        }
+      }
+    },
+    "baseline": null
+  }
+}
