@@ -76,7 +76,7 @@ neuro-symbolic-ai/
 
 ### 1. Клонирование репозитория
 ```bash
-git clone https://github.com/your-username/neuro-symbolic-ai.git
+git clone https://github.com/grapeck/neuro-symbolic-ai.git
 cd neuro-symbolic-ai
 ```
 
